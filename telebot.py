@@ -1,4 +1,5 @@
-import database
+from database import create_table, insert_link
+
 import sqlite3
 import re
 from selenium import webdriver
