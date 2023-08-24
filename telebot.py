@@ -46,13 +46,12 @@ for ul_element in ul_elements:
 
             # Добавляем элемент(в виде словаря) в пустой список
             data_list.append({"Дата": formatted_date, "Время": formatted_time, "Ссылка": link})
+            
+            # Вместо вывода сохраняем данные в базу данных
+            insert_link(link)
+            
         except:
             pass
-
-
-# Выводим список найденных данных
-for data in data_list:
-    print(f"Дата: {data['Дата']}, Время: {data['Время']}, Ссылка: {data['Ссылка']}")
 
 # Закрываем браузер после использования
 driver.quit()
