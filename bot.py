@@ -13,7 +13,14 @@ bot = telebot.TeleBot(TOKEN)
 @bot.message_handler(commands=["start"])
 def start(message):
     # Отправить сообщение
-    bot.send_message(message.chat.id, "Привет, я бот!")
+    bot.send_message(message.chat.id, "Привет, я бот! Выберите, что вас интересует:")
+    # Отправить кнопки
+    keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+    keyboard.add(telebot.types.KeyboardButton(text="Политика", color="blue"))
+    keyboard.add(telebot.types.KeyboardButton(text="Спорт", color="green"))
+
+    # Отправить клавиатуру
+    bot.send_message(message.chat.id, "", reply_markup=keyboard)
 
 # Запустить бота
 
