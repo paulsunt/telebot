@@ -1,21 +1,20 @@
-from telegram import Update
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+import telebot
 
-def start(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text("Привет! Я бот!")
+# Получить токен бота у @BotFather
 
-def echo(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text(update.message.text)
+TOKEN = "6111746050:AAFjtnecLVu_Z1CcEOhHb3LHIv1Csu568Hw"
 
-def main():
-    updater = Updater(token="6111746050:AAFjtnecLVu_Z1CcEOhHb3LHIv1Csu568Hw", use_context=True)
-    dispatcher = updater.dispatcher
+# Создать объект бота
 
-    dispatcher.add_handler(CommandHandler("start", start))
-    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+bot = telebot.TeleBot(TOKEN)
 
-    updater.start_polling()
-    updater.idle()
+# Обработчик команды /start
 
-if __name__ == '__main__':
-    main()
+@bot.message_handler(commands=["start"])
+def start(message):
+    # Отправить сообщение
+    bot.send_message(message.chat.id, "Привет, я бот!")
+
+# Запустить бота
+
+bot.polling()
