@@ -26,14 +26,14 @@ def handle_text(message):
     if message.text == "Политика":
         conn = sqlite3.connect("scraper.db")
         cursor = conn.cursor()
-        cursor.execute("SELECT url FROM scraped_links LIMIT 5")
+        cursor.execute("SELECT date, url FROM scraped_links LIMIT 5")
         links = cursor.fetchall()
         conn.close()
 
         if links:
             response = "Вот первые пять ссылок:\n"
             for link in links:
-                response += link[0] + "\n"
+                response += link[0] + " " + link[1] + "\n"
             bot.send_message(message.chat.id, response)
         else:
             bot.send_message(message.chat.id, "На сегодня новостей нет")

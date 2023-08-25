@@ -1,4 +1,4 @@
-from database import insert_link
+from database import insert_link, create_table
 
 import re
 from selenium import webdriver
@@ -40,14 +40,15 @@ for ul_element in ul_elements:
             formatted_time = time_match.group(1)
 
             # Извлекаем дату из самой ссылки, которую мы нашли по атрибуту href, используя re
-            date = re.search(r'/(\d{4})/(\d{2})/(\d{2})/', link).group(3, 2, 1)
-            formatted_date = "{0}.{1}.{2}".format(*date)
+            local_date = re.search(r'/(\d{4})/(\d{2})/(\d{2})/', link).group(3, 2, 1)
+            formatted_date = "{0}.{1}.{2}".format(*local_date)
 
             # Добавляем элемент(в виде словаря) в пустой список
             data_list.append({"Дата": formatted_date, "Время": formatted_time, "Ссылка": link})
             
             # Вместо вывода сохраняем данные в базу данных
-            insert_link(link)
+            create_table()
+            insert_link(formatted_date, link)
             
         except:
             pass

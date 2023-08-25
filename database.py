@@ -4,16 +4,16 @@ import sqlite3
 def create_table():
     conn = sqlite3.connect("scraper.db")
     cursor = conn.cursor()
-    cursor.execute("CREATE TABLE IF NOT EXISTS scraped_links (id INTEGER PRIMARY KEY, url TEXT)")
+    cursor.execute("CREATE TABLE IF NOT EXISTS scraped_links (id INTEGER PRIMARY KEY, date TEXT, url TEXT)")
     conn.commit()
     cursor.close()
     conn.close()
 
-# Вставить ссылку в таблицу базы данных
-def insert_link(url):
+# Вставить ИД, дату и ссылку в файл БД
+def insert_link(date, url):
     conn = sqlite3.connect("scraper.db")
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO scraped_links (url) VALUES (?)", (url,))
+    cursor.execute("INSERT INTO scraped_links (date, url) VALUES (?, ?)", (date, url))
     conn.commit()
     cursor.close()
     conn.close()
