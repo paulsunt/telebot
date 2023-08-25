@@ -1,16 +1,15 @@
-import sqlite3
+from database import insert_link, create_table
+
 import re
 from selenium import webdriver
 import time
-
-from database import create_table, insert_link
 
 # Инициализация Chrome WebDriver
 driver = webdriver.Chrome()
 
 # Откройте нужный URL
-url = "https://www.mil.gov.ua/news/"
-driver.get(url)
+goal_url = "https://www.mil.gov.ua/news/"
+driver.get(goal_url)
 
 # Подождите, чтобы страница полностью загрузилась
 time.sleep(2)
@@ -22,6 +21,7 @@ article_content = driver.find_element("id", "aticle-content")
 ul_elements = article_content.find_elements("css selector", "ul ul")
 
 # Создаем список для сохранения данных
+data_list = []
 
 # Проходимся по каждому ul элементу
 for ul_element in ul_elements:
@@ -40,12 +40,16 @@ for ul_element in ul_elements:
             formatted_time = time_match.group(1)
 
             # Извлекаем дату из самой ссылки, которую мы нашли по атрибуту href, используя re
-            date = re.search(r'/(\d{4})/(\d{2})/(\d{2})/', link).group(3, 2, 1)
-            formatted_date = "{0}.{1}.{2}".format(*date)
+            local_date = re.search(r'/(\d{4})/(\d{2})/(\d{2})/', link).group(3, 2, 1)
+            formatted_date = "{0}.{1}.{2}".format(*local_date)
 
             # Добавляем элемент(в виде словаря) в пустой список
-            insert_link(formatted_date, formatted_time, link)
-            print(f"Добавлены данные: дата={formatted_date}, время={formatted_time}, ссылка={link}")
+            data_list.append({"Дата": formatted_date, "Время": formatted_time, "Ссылка": link})
+            
+            # Вместо вывода сохраняем данные в базу данных
+            create_table()
+            insert_link(formatted_date, link)
+            
         except:
             pass
 

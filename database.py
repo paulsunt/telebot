@@ -1,40 +1,19 @@
 import sqlite3
 
+# Создать таблицу в базе данных, если её нет
 def create_table():
-    # Подключение к базе данных (создаст файл "scraper.db" в папке проекта, если его нет)
-    conn = sqlite3.connect('scraper.db')
+    conn = sqlite3.connect("scraper.db")
     cursor = conn.cursor()
-
-    # Создание таблицы, если она еще не существует
-    create_table_query = '''
-        CREATE TABLE IF NOT EXISTS scraped_links (
-            id INTEGER PRIMARY KEY,
-            date TEXT,
-            time TEXT,
-            url TEXT
-        )
-    '''
-    cursor.execute(create_table_query)
-
-    # Закрытие курсора и соединения
+    cursor.execute("CREATE TABLE IF NOT EXISTS scraped_links (id INTEGER PRIMARY KEY, date TEXT, url TEXT)")
+    conn.commit()
     cursor.close()
     conn.close()
 
-def insert_link(date, time, url):
-    print(f"Inserting link: date={date}, time={time}, url={url}")  # Отладочное сообщение
-
-    # Подключение к базе данных
-    conn = sqlite3.connect('scraper.db')
+# Вставить ИД, дату и ссылку в файл БД
+def insert_link(date, url):
+    conn = sqlite3.connect("scraper.db")
     cursor = conn.cursor()
-
-    # Вставка спаршенных ссылок в базу данных
-    insert_query = '''
-        INSERT INTO scraped_links (date, time, url)  -- Заменено "data" на "date"
-        VALUES (?, ?, ?)
-    '''
-    cursor.execute(insert_query, (date, time, url))
+    cursor.execute("INSERT INTO scraped_links (date, url) VALUES (?, ?)", (date, url))
     conn.commit()
-
-    # Закрытие курсора и соединения
     cursor.close()
     conn.close()
