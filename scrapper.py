@@ -1,6 +1,5 @@
-from database import create_table, insert_link
+from database import insert_link
 
-import sqlite3
 import re
 from selenium import webdriver
 import time
@@ -9,8 +8,8 @@ import time
 driver = webdriver.Chrome()
 
 # Откройте нужный URL
-url = "https://www.mil.gov.ua/news/"
-driver.get(url)
+goal_url = "https://www.mil.gov.ua/news/"
+driver.get(goal_url)
 
 # Подождите, чтобы страница полностью загрузилась
 time.sleep(2)
