@@ -1,4 +1,5 @@
 import telebot
+import sqlite3
 from telebot import types
 
 # Получить токен бота у @BotFather
@@ -11,17 +12,7 @@ bot = telebot.TeleBot(TOKEN)
 @bot.message_handler(commands=["start"])
 def start(message):
     # Отправить сообщение
-<<<<<<< HEAD
-    bot.send_message(message.chat.id, "Привет, я бот! Выберите, что вас интересует:")
-    # Отправить кнопки
-    keyboard = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-    keyboard.add(telebot.types.KeyboardButton(text="Политика", color="blue"))
-    keyboard.add(telebot.types.KeyboardButton(text="Спорт", color="green"))
-
-    # Отправить клавиатуру
-    bot.send_message(message.chat.id, "", reply_markup=keyboard)
-=======
-    bot.send_message(message.chat.id, "Привет! Хочешь узнать новости о политике или спорте?")
+    bot.send_message(message.chat.id, "Привет, тыкай!")
     # Добавить клавиатуру
     keyboard = types.ReplyKeyboardMarkup(one_time_keyboard=False)
     keyboard.add(types.KeyboardButton("Политика"))
@@ -33,10 +24,21 @@ def start(message):
 @bot.message_handler(func=lambda message: True)
 def handle_text(message):
     if message.text == "Политика":
-        bot.send_message(message.chat.id, "На сегодня новостей нет")
-    elif message.text == "Спорт":
-        bot.send_message(message.chat.id, "На сегодня новостей нет")
->>>>>>> 1f56d94877bedffb345b8d9b2b153267666ec532
+        conn = sqlite3.connect("scraper.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT date, url FROM scraped_links LIMIT 5")
+        links = cursor.fetchall()
+        conn.close()
+
+        if links:
+            response = "Вот первые пять ссылок:\n"
+            for link in links:
+                response += link[0] + " " + link[1] + "\n"
+            bot.send_message(message.chat.id, response)
+        else:
+            bot.send_message(message.chat.id, "На сегодня новостей нет")
+    else:
+        bot.send_message(message.chat.id, "дохуя спортсмен?")
 
 # Запустить бота
 bot.polling()

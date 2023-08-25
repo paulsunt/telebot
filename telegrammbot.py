@@ -1,9 +1,9 @@
-from database import create_table, insert_link
-
 import sqlite3
 import re
 from selenium import webdriver
 import time
+
+from database import create_table, insert_link
 
 # Инициализация Chrome WebDriver
 driver = webdriver.Chrome()
@@ -22,7 +22,6 @@ article_content = driver.find_element("id", "aticle-content")
 ul_elements = article_content.find_elements("css selector", "ul ul")
 
 # Создаем список для сохранения данных
-data_list = []
 
 # Проходимся по каждому ul элементу
 for ul_element in ul_elements:
@@ -45,11 +44,8 @@ for ul_element in ul_elements:
             formatted_date = "{0}.{1}.{2}".format(*date)
 
             # Добавляем элемент(в виде словаря) в пустой список
-            data_list.append({"Дата": formatted_date, "Время": formatted_time, "Ссылка": link})
-            
-            # Вместо вывода сохраняем данные в базу данных
-            insert_link(link)
-            
+            insert_link(formatted_date, formatted_time, link)
+            print(f"Добавлены данные: дата={formatted_date}, время={formatted_time}, ссылка={link}")
         except:
             pass
 
