@@ -17,3 +17,11 @@ def insert_link(date, url):
     conn.commit()
     cursor.close()
     conn.close()
+
+def delete_all_links():
+    conn = sqlite3.connect("scraper.db")
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM scraped_links")
+    conn.commit()
+    cursor.close()
+    conn.close()

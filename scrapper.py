@@ -1,4 +1,4 @@
-from database import insert_link, create_table
+from database import insert_link, create_table, delete_all_links
 
 import re
 from selenium import webdriver
