@@ -4,7 +4,7 @@ from telebot import types
 import re
 
 # Получить токен бота у @BotFather
-TOKEN = "6111746050:AAFjtnecLVu_Z1CcEOhHb3LHIv1Csu568Hw"
+TOKEN = "Your token!"
 
 # Создать объект бота
 bot = telebot.TeleBot(TOKEN)
